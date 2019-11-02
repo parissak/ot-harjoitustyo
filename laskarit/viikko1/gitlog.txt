@@ -1,0 +1,130 @@
+commit e46d79ff5bbcbdfc2fd67f39d5cad2425ffaf16f
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 20:05:08 2019 +0200
+
+    muutokset
+
+ tiedostoja/file1.txt                 | 1 -
+ tiedostoja/{file2.txt => file22.txt} | 0
+ 2 files changed, 1 deletion(-)
+
+commit 9b928fa294b8eae9616d084deefb70c6ae43ab2a
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 20:01:58 2019 +0200
+
+    epämuutoksia
+
+ tiedostoja/file3.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 569f7e59251e47ada2639f99ed55476a0bedb89f
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:59:19 2019 +0200
+
+    tiedostojen lisäys
+
+ tiedostoja/file1.txt | 1 +
+ tiedostoja/file2.txt | 1 +
+ tiedostoja/file3.txt | 1 +
+ 3 files changed, 3 insertions(+)
+
+commit 1e803cf011b7fb8c3530a486d3b7d3083bd502e6
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:47:27 2019 +0200
+
+    lisää muutoksia
+
+ eka.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit cd0848f98d070b56fa12ae700843923b71283584
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:43:24 2019 +0200
+
+    muutoksia
+
+ stuff/kolmas.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 4beaace4d94db0f8789776a70fb6732ea4430e98
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:40:37 2019 +0200
+
+    nimen vaihto
+
+ tiedosto.txt | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+commit 78ae9e52b428b0ffee3f67e2e5dbe1ef748a95f3
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:39:07 2019 +0200
+
+    toisen tiedoston poisto
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit e924c77bcb1804a195372d11f0886629c2f7bbef
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:35:53 2019 +0200
+
+    tekstin poistoa ja lisäystä
+
+ tiedosto.txt | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+commit 763e3c3b7dbbb83ad61904eae5d66620ef6d3901
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:34:40 2019 +0200
+
+    muutos tiedostoon
+
+ tiedosto.txt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+commit d385280ffb3d90eb9334d0804f5276d88abe35c9
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:28:19 2019 +0200
+
+    hakemisto ja siirto
+
+ kolmas.txt => stuff/kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 90e6fdbe38f99745961819f47df973d5c35a365c
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:26:37 2019 +0200
+
+    neljännet muutokset
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit 247e35473e5c3fdd1d15d3da8a7976ee87d83721
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:25:24 2019 +0200
+
+    kolmas tiedosto
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 013250e613c9805bf94a5eee14db5f024d40dfb6
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:22:20 2019 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit ae787f470108f435248f9e119123bcf449d2fe56
+Author: parissak <sakari.parisaari@helsinki.fi>
+Date:   Fri Nov 1 19:19:44 2019 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
