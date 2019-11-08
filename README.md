@@ -9,6 +9,6 @@
 
 
 ### Viikko 2
-[kattavuus.txt](https://github.com/parissak/ot-harjoitustyo/blob/master/laskarit/viikko2/kattavuus.png)
+[kattavuus.png](https://github.com/parissak/ot-harjoitustyo/blob/master/laskarit/viikko2/kattavuus.png)
 
 [Unicafe](https://github.com/parissak/ot-harjoitustyo/tree/master/laskarit/viikko2/Unicafe)
