@@ -15,5 +15,10 @@
 [Unicafe](https://github.com/parissak/ot-harjoitustyo/tree/master/laskarit/viikko2/Unicafe)
 
 
+### Viikko 3
+[tehtävät erikseen kuvina](https://github.com/parissak/ot-harjoitustyo/tree/master/laskarit/viikko3)
+
+
 ## Dokumentaatio
 [Vaatimusmäärittely](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusm%C3%A4%C3%A4rittely.md)
+
