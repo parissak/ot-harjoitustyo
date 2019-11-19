@@ -1,7 +1,7 @@
 # Vaatimusmäärittely
 
 ## Sovelluksen tarkoitus
-Sovelluksen avulla käyttäjän on mahdollista luoda haluamalleen tapahtumalle budjetti ja seurata budjetteja. 
+Sovelluksen avulla käyttäjän on mahdollista luoda haluamalleen asialle budjetti ja seurata budjetteja. 
 
 ## Käyttäjät
 Sovellukseen liittyy ainoastaan yhdenlainen käyttäjärooli eli normaali käyttäjä.
