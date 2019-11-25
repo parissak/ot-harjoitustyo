@@ -1,6 +1,8 @@
+package budjetointisovellus.domain;
 
 
-import budjetointisovellus.Budget;
+
+import budjetointisovellus.domain.Budget;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;

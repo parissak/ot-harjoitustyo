@@ -1,4 +1,4 @@
-package budjetointisovellus;
+package budjetointisovellus.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,5 +30,26 @@ public class Budget {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public void removeEvent(String name) {
+        this.events.remove(name);
+    }
+    
+    public int getBalance() {
+        int balance = 0;
+        
+        for (Map.Entry<String, Integer> entry : events.entrySet()) {
+            balance += entry.getValue();
+        }
+        
+        return balance;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + ", " + getBalance();
+    }
+    
+    
     
 }

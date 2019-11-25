@@ -1,5 +1,6 @@
-package budjetointisovellus;
+package budjetointisovellus.domain;
 
+import budjetointisovellus.domain.Budget;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,31 +19,27 @@ public class BudgetController {
         this.budgetList.add(budget);
     }
 
-    public List<String> getBudgets() {
-        List<String> list = new ArrayList<>();
+    public void removeBudget(String budgetName) {
+        Budget budget = null;
 
-        for (Budget budget : budgetList) {
-            int balance = calculateBalance(budget);
-            list.add(budget.getName() + ", " + balance);
+        for (Budget b : budgetList) {
+            if (b.getName().equals(budgetName)) {
+                budget = b;
+            }
         }
-        return list;
+        budgetList.remove(budget);
     }
 
-    public void addEntryToBudget(String budget, String name, int amount) {
+    public List<Budget> getBudgets() {
+        return budgetList;
+    }
+
+    public void addEventToBudget(String budget, String name, int amount) {
         for (Budget b : budgetList) {
             if (b.getName().equals(budget)) {
                 b.setEvent(name, amount);
             }
         }
-    }
-
-    private int calculateBalance(Budget budget) {
-        int balance = 0;
-
-        for (Map.Entry<String, Integer> entry : budget.getEvents().entrySet()) {
-            balance += entry.getValue();
-        }
-        return balance;
     }
 
     public HashMap<String, Integer> getBudgetEvents(String name) {
@@ -55,4 +52,14 @@ public class BudgetController {
         }
         return map;
     }
+
+    public void removeBudgetEvent(String budgetName, String name) {
+
+        for (Budget one : budgetList) {
+            if (one.getName().equals(budgetName)) {
+                one.getEvents().remove(name);
+            }
+        }
+    }
+
 }
