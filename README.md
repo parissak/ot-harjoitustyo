@@ -6,5 +6,5 @@ Sovelluksen avulla käyttäjän on mahdollista luoda haluamalleen asialle budjet
 
 [Työaikakirjanpito](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/ty%C3%B6aikakirjanpito.md)
 
-[Arrkitehtuuri] (https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/dokumentaatio.md)
+[Arkkitehtuuri](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/dokumentaatio.md)
 
