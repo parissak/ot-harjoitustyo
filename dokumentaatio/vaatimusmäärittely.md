@@ -7,9 +7,9 @@ Sovelluksen avulla käyttäjän on mahdollista luoda haluamalleen asialle budjet
 Sovellukseen liittyy ainoastaan yhdenlainen käyttäjärooli eli normaali käyttäjä.
 
 ## Perustoiminnallisuudet
-* Budjetin lisääminen käyttäjän haluamalle tapahtumalle.
-* Budjetin muokkaaminen, eli tulon tai kulun liittäminen budjettiin ja vastaavasti myös erän poistaminen budjetista.
-* Saldon näyttäminen käyttäjälle.
+* Budjetin lisääminen/poistaminen käyttäjän haluamalle tapahtumalle.  **Tehty**
+* Budjetin muokkaaminen, eli tulon tai kulun liittäminen budjettiin ja vastaavasti myös erän poistaminen budjetista.  **Tehty**
+* Budjetin saldon näyttäminen käyttäjälle. **Tehty**
 * Graafinen käyttöliittymä.
 * Tiedon tallentaminen tietokantaan.
 
