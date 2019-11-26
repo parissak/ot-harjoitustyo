@@ -1,7 +1,9 @@
 package budjetointisovellus;
 
+import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.BudgetController;
 import budjetointisovellus.ui.UI;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {

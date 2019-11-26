@@ -70,16 +70,20 @@ public class UI {
     }
 
     private void addBudget() {
-        System.out.print("Insert name: ");
-        String name = scanner.nextLine();
+        String name = "";
+
+        while (name.isEmpty()) {
+            System.out.print("Insert name: ");
+            name = scanner.nextLine();
+        }
         budgetController.addBudget(name);
     }
 
     private void removeBudget() {
         String budgetName = subAskBudget();
-        
+
         budgetController.removeBudget(budgetName);
-        
+
     }
 
     private void printBudgets() {
@@ -128,7 +132,7 @@ public class UI {
 
         return name;
     }
-    
+
     private void subPrintEvents(String budgetName) {
         Map<String, Integer> map = budgetController.getBudgetEvents(budgetName);
 
@@ -138,7 +142,7 @@ public class UI {
             System.out.println(key + ", " + value);
         }
         System.out.println("");
-        
+
     }
 
 }
