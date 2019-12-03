@@ -11,7 +11,7 @@ Sovellukseen liittyy ainoastaan yhdenlainen käyttäjärooli eli normaali käytt
 * Budjetin muokkaaminen, eli tulon tai kulun liittäminen budjettiin ja vastaavasti myös erän poistaminen budjetista. **Tehty**
 * Budjetin saldon näyttäminen käyttäjälle. **Tehty**
 * Graafinen käyttöliittymä.
-* Tiedon tallentaminen tietokantaan.
+* Tiedon tallentaminen tietokantaan. **Tehty**
 
 ## Mahdolliset lisätoiminnallisuudet
 * Usean eri käyttäjän mahdollistaminen, eli käyttäjäkohtaisen tiedon tallentaminen ja käyttäjäkohtainen tunnistautuminen.
