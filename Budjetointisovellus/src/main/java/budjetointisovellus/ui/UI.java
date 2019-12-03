@@ -1,20 +1,19 @@
 package budjetointisovellus.ui;
 
 import budjetointisovellus.domain.Budget;
-import budjetointisovellus.domain.BudgetController;
+import budjetointisovellus.domain.BudgetService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import sun.awt.X11.XConstants;
 
 public class UI {
 
     private Scanner scanner;
-    private BudgetController budgetController;
+    private BudgetService service;
 
-    public UI(BudgetController budgetController, Scanner scanner) {
-        this.budgetController = budgetController;
+    public UI(BudgetService budgetService, Scanner scanner) {
+        this.service = budgetService;
         this.scanner = scanner;
     }
 
@@ -76,19 +75,18 @@ public class UI {
             System.out.print("Insert name: ");
             name = scanner.nextLine();
         }
-        budgetController.addBudget(name);
+
+        testAction(service.create(name));
     }
 
     private void removeBudget() {
         String budgetName = subAskBudget();
-
-        budgetController.removeBudget(budgetName);
-
+        testAction(service.removeBudget(budgetName));
     }
 
     private void printBudgets() {
         System.out.println("Existing budgets with corresponding balance: ");
-        for (Budget budget : budgetController.getBudgets()) {
+        for (Budget budget : service.getBudgets()) {
             System.out.println(budget);
         }
     }
@@ -104,8 +102,7 @@ public class UI {
         System.out.print("> ");
         int amount = Integer.parseInt(scanner.nextLine());
 
-        budgetController.addEventToBudget(budgetName, eventName, amount);
-
+        testAction(service.addEventToBudget(budgetName, eventName, amount));
     }
 
     private void printBudgetEvents() {
@@ -120,7 +117,7 @@ public class UI {
         System.out.println("Choose an event");
         String eventName = scanner.nextLine();
 
-        budgetController.removeBudgetEvent(budgetName, eventName);
+        service.removeBudgetEvent(budgetName, eventName);
     }
 
     private String subAskBudget() {
@@ -134,14 +131,27 @@ public class UI {
     }
 
     private void subPrintEvents(String budgetName) {
-        Map<String, Integer> map = budgetController.getBudgetEvents(budgetName);
+        Map<String, Integer> map = service.getBudgetEvents(budgetName);
 
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
-            System.out.println(key + ", " + value);
+            if (!key.equals("0")) {
+                System.out.println(key + ", " + value);
+            } else {
+                System.out.println("No events");
+            }
         }
         System.out.println("");
+
+    }
+
+    private void testAction(Boolean test) {
+        if (test == true) {
+            System.out.println("Action successful");
+        } else {
+            System.out.println("Action failed");
+        }
 
     }
 
