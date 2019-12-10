@@ -2,6 +2,10 @@
 
 Lataa viimeisin ![release](https://github.com/parissak/ot-harjoitustyo/releases/tag/viikko6).
 
+## Ohjelman käynnistäminen
+
+Ohjelma käynnistetään seuraavalla komennolla: java -jar todoapp.jar
+
 ## Budjetin luominen ja poistaminen
 
 ![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/BudjetinTallennus.PNG)
