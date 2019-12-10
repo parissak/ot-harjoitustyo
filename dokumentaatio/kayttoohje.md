@@ -4,7 +4,7 @@ Lataa viimeisin ![release](https://github.com/parissak/ot-harjoitustyo/releases/
 
 ## Ohjelman käynnistäminen
 
-Ohjelma käynnistetään seuraavalla komennolla: java -jar todoapp.jar
+Ohjelma käynnistetään seuraavalla komennolla: java -jar budjetointisovellus.jar
 
 ## Budjetin luominen ja poistaminen
 
