@@ -25,21 +25,18 @@ public class BudgetTest {
     }
 
     @Test
-    public void containsEvent() {
-        HashMap<String, Integer> test = new HashMap<>();
+    public void setEventToBudget() {
         budget.setEvent("income", 100);
-        test.put("income", 100);
 
-        assertEquals(test, budget.getEvents());
+        assertEquals(1, budget.getEvents().size());
     }
 
     @Test
     public void removeEvent() {
-        HashMap<String, Integer> test = new HashMap<>();
         budget.setEvent("income", 100);
-        budget.removeEvent("income");
+        budget.getEvents().remove(new Transaction("income", 0));
 
-        assertEquals(test, budget.getEvents());
+        assertEquals(0, budget.getEvents().size());
     }
 
     @Test

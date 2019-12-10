@@ -5,22 +5,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Budjetti-käsitettä vastaava luokka. Voi sisältää yhden tai useamman erän. 
+ * Laskee sisältyvien erien summan.
+ */
 public class Budget {
 
     private String name;
-    private HashMap<String, Integer> events;
+    private ArrayList<Transaction> events;
 
     public Budget(String name) {
         this.name = name;
-        this.events = new HashMap<>();
+        this.events = new ArrayList<>();
     }
 
-    public HashMap<String, Integer> getEvents() {
+    public ArrayList getEvents() {
         return events;
     }
 
     public void setEvent(String name, int amount) {
-        events.put(name, amount);
+        events.add(new Transaction(name, amount));
     }
 
     public String getName() {
@@ -37,11 +41,9 @@ public class Budget {
     
     public int getBalance() {
         int balance = 0;
-        
-        for (Map.Entry<String, Integer> entry : events.entrySet()) {
-            balance += entry.getValue();
+        for (Transaction event : events) {
+            balance += event.getAmount();
         }
-        
         return balance;
     }
 

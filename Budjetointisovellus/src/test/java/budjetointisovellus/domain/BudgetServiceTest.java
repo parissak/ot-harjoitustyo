@@ -3,6 +3,7 @@ package budjetointisovellus.domain;
 import budjetointisovellus.dao.BudgetDao;
 import budjetointisovellus.dao.FileBudgetDao;
 import budjetointisovellus.domain.BudgetService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.junit.After;
@@ -40,28 +41,30 @@ public class BudgetServiceTest {
     }
 
     @Test
-    public void addEventToCorrectBudget() {
+    public void addTransactionToCorrectBudget() {
         assertEquals(true, service.addEventToBudget("New Budget", "test", 100));
     }
 
     @Test
-    public void eventIsContained() {
-        service.addEventToBudget("New Budget", "key", 100);
-        HashMap<String, Integer> testMap = service.getBudgetEvents("New Budget");
-        
-        assertEquals(true, testMap.containsKey("key"));
-        assertEquals(true, testMap.containsValue(100));
+    public void transactionIsContained() {
+        service.addEventToBudget("New Budget", "New event", 100);
+        Transaction event = new Transaction("New event", 0);
+
+        assertEquals(true, service.getBudgetEvents("New Budget").contains(event));
     }
 
     @Test
-    public void correctEventRemoved() {
-        service.addEventToBudget("New Budget", "a", 100);
-        service.addEventToBudget("New Budget", "b", 300);
-        service.removeBudgetEvent("New Budget", "a");
-        HashMap<String, Integer> testMap = service.getBudgetEvents("New Budget");
+    public void correctTransactionRemoved() {
+        service.addEventToBudget("New Budget", "Event", 100);
+        service.addEventToBudget("New Budget", "Another", 100);
+        service.removeBudgetEvent("New Budget", "Event");
 
-        assertEquals(false, testMap.containsKey("a"));
-        assertEquals(false, testMap.containsValue(100));
+        Transaction testA = new Transaction("Event", 0);
+        Transaction testB = new Transaction("Another", 0);
+
+        ArrayList<Transaction> list = service.getBudgetEvents("New Budget");
+
+        assertFalse(list.contains(testA));
+        assertTrue(list.contains(testB));
     }
-
 }

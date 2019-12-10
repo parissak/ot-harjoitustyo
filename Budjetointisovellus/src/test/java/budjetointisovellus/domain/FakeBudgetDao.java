@@ -4,7 +4,8 @@ import budjetointisovellus.dao.BudgetDao;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FakeBudgetDao implements BudgetDao{
+public class FakeBudgetDao implements BudgetDao {
+
     ArrayList<Budget> budgets;
 
     public FakeBudgetDao() {
@@ -23,7 +24,7 @@ public class FakeBudgetDao implements BudgetDao{
 
     @Override
     public void remove(Budget budget, String eventName) throws Exception {
-        budget.getEvents().remove(eventName);
+        budget.getEvents().remove(new Transaction(eventName, 0));
     }
 
     @Override
@@ -33,11 +34,11 @@ public class FakeBudgetDao implements BudgetDao{
 
     @Override
     public List<Budget> getBudgets() {
-         return budgets;
+        return budgets;
     }
 
     void create(String name) {
         this.budgets.add(new Budget(name));
     }
-    
+
 }

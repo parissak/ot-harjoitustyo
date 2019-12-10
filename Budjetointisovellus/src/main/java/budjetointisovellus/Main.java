@@ -7,18 +7,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        
-        String budgetFile = "budgets.txt";
-        
-        FileBudgetDao budgetDao = new FileBudgetDao(budgetFile);
-        
-        BudgetService service = new BudgetService(budgetDao);
-        
-        UI ui = new UI(service, scanner);
-        
-        ui.start();
+    public static void main(String[] args) {
+        UI.main(args);
 
     }
 }
