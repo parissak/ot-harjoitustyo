@@ -4,6 +4,7 @@ import budjetointisovellus.dao.FileBudgetDao;
 import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.BudgetService;
 import budjetointisovellus.domain.Transaction;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,16 +13,21 @@ import java.util.Scanner;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -31,7 +37,10 @@ public class UI extends Application {
 
     private BudgetService service;
 
+    //käsiteltävä budjetti, voisi siirtää parametriksi
     private Budget budget;
+    //summaan liittyvä label
+    private Label sumLabel = new Label();
 
     private Stage stage;
     private VBox budgetNodes;
@@ -40,17 +49,16 @@ public class UI extends Application {
     private Scene entryScene;
     private Scene mainScene;
 
-    /**
-     * Apumetodi, mikä palauttaa totuusarvon toiminnan onnistumisesta riippuen.
-     */
-    private void testAction(Boolean test) {
-        if (test == true) {
-            System.out.println("Action successful");
-        } else {
-            System.out.println("Action failed");
-        }
-    }
-
+//    /**
+//     * Apumetodi, mikä palauttaa totuusarvon toiminnan onnistumisesta riippuen.
+//     */
+//    private void testAction(Boolean test) {
+//        if (test == true) {
+//            System.out.println("Action successful");
+//        } else {
+//            System.out.println("Action failed");
+//        }
+//    }
     public static void main(String[] args) {
         launch(args);
     }
@@ -73,19 +81,27 @@ public class UI extends Application {
         this.stage = primaryStage;
 
         //main scene
-        TextField textField = new TextField();
-        textField.setPromptText("Insert name");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Insert name");
+        setTextFieldWidth(nameField);
         Button submitButton = new Button("Add budget");
-        BorderPane mainPane = new BorderPane();
+
+        ScrollPane budgetScroll = new ScrollPane();
+        BorderPane mainPane = new BorderPane(budgetScroll);
+        mainScene = new Scene(mainPane, 500, 300);
 
         HBox menuPane = new HBox(10);
-        menuPane.getChildren().addAll(textField, submitButton);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        menuPane.getChildren().addAll(nameField, spacer,submitButton);
         menuPane.setPadding(new Insets(20, 20, 20, 20));
 
         submitButton.setOnAction((event) -> {
-            testAction(service.create(textField.getText()));
-            textField.clear();
-            redrawBudgets();
+            if (validateStringField(nameField.getText())) {
+                service.create(nameField.getText());
+                redrawBudgets();
+            }
+            nameField.clear();
         });
 
         this.budgetNodes = new VBox(10);
@@ -93,9 +109,8 @@ public class UI extends Application {
         this.budgetNodes.setMinWidth(280);
         redrawBudgets();
 
+        budgetScroll.setContent(budgetNodes);
         mainPane.setTop(menuPane);
-        mainPane.setCenter(budgetNodes);
-        mainScene = new Scene(mainPane, 500, 300);
 
         primaryStage.setScene(mainScene);
         primaryStage.show();
@@ -123,8 +138,7 @@ public class UI extends Application {
 
         entryButton.setOnAction(e -> {
             entryScene(budget);
-        }
-        );
+        });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -156,6 +170,7 @@ public class UI extends Application {
         removeButton.setOnAction(eb -> {
             service.removeBudgetEvent(budget.getName(), transaction.getName());
             redrawEntries();
+            updateBudgetSum();
         });
 
         return hBox;
@@ -170,7 +185,9 @@ public class UI extends Application {
      */
     public void entryScene(Budget budget) {
         this.budget = budget;
-        BorderPane entryPane = new BorderPane();
+        
+        ScrollPane entryScroll = new ScrollPane();
+        BorderPane entryPane = new BorderPane(entryScroll);
 
         HBox components = new HBox(10);
 
@@ -181,15 +198,23 @@ public class UI extends Application {
         Button addEntryButton = new Button("Add entry");
         Button previousButton = new Button("Go Back");
 
+        setTextFieldWidth(nameField);
+        setTextFieldWidth(amountField);
         components.getChildren().addAll(nameField, amountField, addEntryButton, previousButton);
         components.setPadding(new Insets(20, 20, 20, 20));
 
+        sumLabel.setPadding(new Insets(20, 20, 20, 20));
+        updateBudgetSum();
+
         addEntryButton.setOnAction(eb -> {
-            service.addEventToBudget(budget.getName(), nameField.getText(),
-                    Integer.parseInt(amountField.getText()));
+            if (validateStringField(nameField.getText()) && validateNumberField(amountField.getText())) {
+                service.addEventToBudget(budget.getName(), nameField.getText(),
+                        Integer.valueOf(amountField.getText()));
+                redrawEntries();
+                updateBudgetSum();
+            }
             nameField.clear();
             amountField.clear();
-            redrawEntries();
         });
 
         previousButton.setOnAction(eb -> {
@@ -203,7 +228,8 @@ public class UI extends Application {
         redrawEntries();
 
         entryPane.setTop(components);
-        entryPane.setCenter(entryNodes);
+        entryPane.setBottom(sumLabel);
+        entryScroll.setContent(this.entryNodes);
         entryScene = new Scene(entryPane, 500, 300);
         stage.setScene(entryScene);
     }
@@ -230,6 +256,60 @@ public class UI extends Application {
         list.forEach(Transaction -> {
             entryNodes.getChildren().add(createEntryNode(Transaction));
         });
+    }
 
+    private void setTextFieldWidth(TextField field) {
+        field.setMaxWidth(120);
+    }
+
+    /**
+     * Päivittää budjetin summan ja maalaa punaiseksi jos summa on negatiivinen.
+     */
+    private void updateBudgetSum() {
+        if (this.budget.getBalance() < 0) {
+            sumLabel.setTextFill(Color.RED);
+        } else {
+            sumLabel.setTextFill(Color.BLACK);
+        }
+
+        this.sumLabel.setText("Total: " + this.budget.getBalance());
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("Closing App");
+    }
+
+    private boolean validateStringField(String text) {
+        if (text.isEmpty() || text.length() > 15) {
+            Alert errorAlert = new Alert(AlertType.ERROR);
+            errorAlert.setHeaderText("Input not valid");
+            errorAlert.setContentText("Name cannot be empty or over 15 characters");
+            errorAlert.show();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateNumberField(String toBeParsed) {
+        if (!toBeParsed.matches("[0-9]+") || toBeParsed.isEmpty()) {
+            Alert errorAlert = new Alert(AlertType.ERROR);
+            errorAlert.setHeaderText("Input not valid");
+            errorAlert.setContentText("Amount must only contain digits");
+            errorAlert.show();
+            return false;
+        }
+        return testNumberLenght(toBeParsed);
+    }
+
+    private boolean testNumberLenght(String number) {
+        if (number.length() > 7) {
+            Alert errorAlert = new Alert(AlertType.ERROR);
+            errorAlert.setHeaderText("Input not valid");
+            errorAlert.setContentText("Amount cannot be over seven digits");
+            errorAlert.show();
+            return false;
+        }
+        return true;
     }
 }
