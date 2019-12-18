@@ -27,7 +27,7 @@ public class FileBudgetDaoTest {
             file.write("Budget;Event;0\n");
         }
 
-        dao = new FileBudgetDao(testFile.getAbsolutePath());
+//        dao = new FileBudgetDao(testFile.getAbsolutePath());
     }
 //
 //    @Test

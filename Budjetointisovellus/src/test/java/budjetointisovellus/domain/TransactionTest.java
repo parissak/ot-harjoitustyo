@@ -16,12 +16,6 @@ public class TransactionTest {
     }
 
     @Test
-    public void setNameGetName() {
-        this.transaction.setName("New");
-        assertEquals("New", this.transaction.getName());
-    }
-
-    @Test
     public void getCorrectAmount() {
         this.transaction.setAmount(100);
         assertEquals(100, this.transaction.getAmount());
@@ -34,14 +28,9 @@ public class TransactionTest {
     }
     
     @Test
-    public void notEqualDifferentName() {
-        Transaction b = new Transaction("notTest", 0);
+    public void notEqualWhenDifferentName() {
+        Transaction b = new Transaction("failTest", 0);
         assertFalse(this.transaction.equals(b));
-    }
-        
-    @Test
-    public void correctOutput() {
-        assertEquals("Test, 0", this.transaction.toString());
     }
 
 }

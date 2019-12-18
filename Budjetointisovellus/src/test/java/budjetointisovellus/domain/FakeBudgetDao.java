@@ -18,13 +18,13 @@ public class FakeBudgetDao implements BudgetDao {
     }
 
     @Override
-    public void create(Budget budget, String name, int amount) throws Exception {
-        budget.setEvent(name, amount);
+    public void createTransaction(Budget budget, String name, int amount) throws Exception {
+        budget.setTransaction(name, amount);
     }
 
     @Override
-    public void remove(Budget budget, String eventName) throws Exception {
-        budget.getEvents().remove(new Transaction(eventName, 0));
+    public void removeTransaction(Budget budget, String eventName) throws Exception {
+        budget.getTransactions().remove(new Transaction(eventName, 0));
     }
 
     @Override
@@ -35,10 +35,6 @@ public class FakeBudgetDao implements BudgetDao {
     @Override
     public List<Budget> getBudgets() {
         return budgets;
-    }
-
-    void create(String name) {
-        this.budgets.add(new Budget(name));
     }
 
 }

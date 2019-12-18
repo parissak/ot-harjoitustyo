@@ -1,8 +1,5 @@
 package budjetointisovellus.domain;
 
-import budjetointisovellus.dao.BudgetDao;
-import budjetointisovellus.dao.FileBudgetDao;
-import budjetointisovellus.domain.BudgetService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -16,23 +13,33 @@ import static org.junit.Assert.*;
 public class BudgetServiceTest {
 
     BudgetService service;
-    FakeBudgetDao fakeDao;
+    FakeBudgetDao budgetDao;
+    FakeUserDao userDao;
 
     @Before
-    public void setUp() {
-        fakeDao = new FakeBudgetDao();
-        service = new BudgetService(fakeDao);
-        service.create("New Budget");
+    public void setUp() throws Exception {
+        budgetDao = new FakeBudgetDao();
+        userDao = new FakeUserDao();
+        User userOne = new User("tester1");
+        User userTwo = new User("tester2");
+
+        userDao.create(userOne);
+        userDao.create(userTwo);
+        budgetDao.create(new Budget("Budget", userOne));
+
+        service = new BudgetService(budgetDao, userDao);
+        service.logIn("tester1");
+
     }
 
     @Test
     public void createBudget() {
-        assertEquals(true, service.create("New Budget"));
+        assertTrue(service.createBudget("Budget"));
     }
 
     @Test
     public void removeBudget() {
-        assertEquals(true, service.removeBudget("New Budget"));
+        assertTrue(service.removeBudget("Budget"));
     }
 
     @Test
@@ -42,27 +49,27 @@ public class BudgetServiceTest {
 
     @Test
     public void addTransactionToCorrectBudget() {
-        assertEquals(true, service.addEventToBudget("New Budget", "test", 100));
+        assertTrue(service.addTransactionToBudget("Budget", "test", 100));
     }
 
     @Test
     public void transactionIsContained() {
-        service.addEventToBudget("New Budget", "New event", 100);
-        Transaction event = new Transaction("New event", 0);
+        service.addTransactionToBudget("Budget", "Event", 100);
+        Transaction event = new Transaction("Event", 0);
 
-        assertEquals(true, service.getBudgetEvents("New Budget").contains(event));
+        assertTrue(service.getBudgetEvents("Budget").contains(event));
     }
 
     @Test
     public void correctTransactionRemoved() {
-        service.addEventToBudget("New Budget", "Event", 100);
-        service.addEventToBudget("New Budget", "Another", 100);
-        service.removeBudgetEvent("New Budget", "Event");
+        service.addTransactionToBudget("Budget", "Event", 100);
+        service.addTransactionToBudget("Budget", "Another", 100);
+        service.removeBudgetEvent("Budget", "Event");
 
         Transaction testA = new Transaction("Event", 0);
         Transaction testB = new Transaction("Another", 0);
 
-        ArrayList<Transaction> list = service.getBudgetEvents("New Budget");
+        ArrayList<Transaction> list = service.getBudgetEvents("Budget");
 
         assertFalse(list.contains(testA));
         assertTrue(list.contains(testB));

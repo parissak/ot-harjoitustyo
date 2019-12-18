@@ -1,6 +1,7 @@
 package budjetointisovellus.ui;
 
 import budjetointisovellus.dao.FileBudgetDao;
+import budjetointisovellus.dao.FileUserDao;
 import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.BudgetService;
 import budjetointisovellus.domain.Transaction;
@@ -47,18 +48,9 @@ public class UI extends Application {
     private VBox entryNodes;
 
     private Scene entryScene;
-    private Scene mainScene;
+    private Scene loginScene;
+    private Scene budgetScene;
 
-//    /**
-//     * Apumetodi, mikä palauttaa totuusarvon toiminnan onnistumisesta riippuen.
-//     */
-//    private void testAction(Boolean test) {
-//        if (test == true) {
-//            System.out.println("Action successful");
-//        } else {
-//            System.out.println("Action failed");
-//        }
-//    }
     public static void main(String[] args) {
         launch(args);
     }
@@ -66,9 +58,11 @@ public class UI extends Application {
     @Override
     public void init() throws Exception {
         String budgetFile = "budgets.txt";
+        String userFile = "users.txt";
 
-        FileBudgetDao budgetDao = new FileBudgetDao(budgetFile);
-        this.service = new BudgetService(budgetDao);
+        FileUserDao userDao = new FileUserDao(userFile);
+        FileBudgetDao budgetDao = new FileBudgetDao(budgetFile, userDao);
+        this.service = new BudgetService(budgetDao, userDao);
     }
 
     /**
@@ -77,31 +71,95 @@ public class UI extends Application {
      * @param primaryStage ikkunaa kuvaava Stage-olio
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         this.stage = primaryStage;
 
-        //main scene
+        //login scene
+        VBox loginPane = new VBox(10);
+
+        HBox userPane = new HBox(20);
+        userPane.setPadding(new Insets(30));
+        TextField userField = new TextField();
+        setTextFieldWidth(userField);
+        userField.setPromptText("Insert username");
+        Button logInButton = new Button("Login");
+        userPane.getChildren().addAll(userField, logInButton);
+
+        Label createMessage = new Label();
+        createMessage.setPadding(new Insets(0, 0, 0, 30));
+
+        logInButton.setOnAction((event) -> {
+            String logUser = userField.getText();
+
+            if (validateStringField(logUser)) {
+                if (service.logIn(logUser)) {
+                    budgetScene();
+                } else {
+                    createMessage.setText("No such user exists");
+                }
+                userField.clear();
+            }
+        });
+
+        HBox newUserPane = new HBox(20);
+        newUserPane.setPadding(new Insets(30));
+        TextField newUserField = new TextField();
+        setTextFieldWidth(newUserField);
+        newUserField.setPromptText("Insert name");
+        Button createButton = new Button("Create new user");
+
+        createButton.setOnAction((event) -> {
+            String newUserName = newUserField.getText();
+
+            if (validateStringField(newUserName)) {
+                if (service.createUser(newUserName)) {
+                    createMessage.setText("User created succesfully");
+                } else {
+                    createMessage.setText("Username already in use");
+                }
+                newUserField.clear();
+            }
+        }
+        );
+
+        newUserPane.getChildren().addAll(newUserField, createButton);
+
+        loginPane.getChildren().addAll(userPane, newUserPane, createMessage);
+        Scene loginScene = new Scene(loginPane, 500, 300);
+
+        this.stage.setTitle("Budgeting App");
+        this.stage.setScene(loginScene);
+        this.stage.show();
+    }
+
+    public void budgetScene() {
         TextField nameField = new TextField();
         nameField.setPromptText("Insert name");
         setTextFieldWidth(nameField);
         Button submitButton = new Button("Add budget");
+        Button logOut = new Button("Log out");
 
         ScrollPane budgetScroll = new ScrollPane();
         BorderPane mainPane = new BorderPane(budgetScroll);
-        mainScene = new Scene(mainPane, 500, 300);
+        budgetScene = new Scene(mainPane, 500, 300);
 
-        HBox menuPane = new HBox(10);
+        HBox menu = new HBox(10);
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        menuPane.getChildren().addAll(nameField, spacer,submitButton);
-        menuPane.setPadding(new Insets(20, 20, 20, 20));
+        menu.getChildren().addAll(nameField, spacer, submitButton, logOut);
+        menu.setPadding(new Insets(20, 20, 20, 20));
 
         submitButton.setOnAction((event) -> {
             if (validateStringField(nameField.getText())) {
-                service.create(nameField.getText());
+                service.createBudget(nameField.getText());
                 redrawBudgets();
             }
             nameField.clear();
+        });
+
+        logOut.setOnAction((event) -> {
+            start(this.stage);
+
         });
 
         this.budgetNodes = new VBox(10);
@@ -110,10 +168,11 @@ public class UI extends Application {
         redrawBudgets();
 
         budgetScroll.setContent(budgetNodes);
-        mainPane.setTop(menuPane);
+        mainPane.setTop(menu);
 
-        primaryStage.setScene(mainScene);
-        primaryStage.show();
+        stage.setTitle("Budgeting App");
+        stage.setScene(budgetScene);
+        stage.show();
     }
 
     /**
@@ -185,7 +244,7 @@ public class UI extends Application {
      */
     public void entryScene(Budget budget) {
         this.budget = budget;
-        
+
         ScrollPane entryScroll = new ScrollPane();
         BorderPane entryPane = new BorderPane(entryScroll);
 
@@ -208,7 +267,7 @@ public class UI extends Application {
 
         addEntryButton.setOnAction(eb -> {
             if (validateStringField(nameField.getText()) && validateNumberField(amountField.getText())) {
-                service.addEventToBudget(budget.getName(), nameField.getText(),
+                service.addTransactionToBudget(budget.getName(), nameField.getText(),
                         Integer.valueOf(amountField.getText()));
                 redrawEntries();
                 updateBudgetSum();
@@ -218,7 +277,7 @@ public class UI extends Application {
         });
 
         previousButton.setOnAction(eb -> {
-            stage.setScene(mainScene);
+            stage.setScene(budgetScene);
             redrawBudgets();
         });
 
@@ -259,7 +318,7 @@ public class UI extends Application {
     }
 
     private void setTextFieldWidth(TextField field) {
-        field.setMaxWidth(120);
+        field.setMaxWidth(130);
     }
 
     /**
@@ -271,7 +330,6 @@ public class UI extends Application {
         } else {
             sumLabel.setTextFill(Color.BLACK);
         }
-
         this.sumLabel.setText("Total: " + this.budget.getBalance());
     }
 
@@ -292,7 +350,7 @@ public class UI extends Application {
     }
 
     private boolean validateNumberField(String toBeParsed) {
-        if (!toBeParsed.matches("[0-9]+") || toBeParsed.isEmpty()) {
+        if (!toBeParsed.matches("^-?[1-9][0-9]+$") || toBeParsed.isEmpty()) {
             Alert errorAlert = new Alert(AlertType.ERROR);
             errorAlert.setHeaderText("Input not valid");
             errorAlert.setContentText("Amount must only contain digits");

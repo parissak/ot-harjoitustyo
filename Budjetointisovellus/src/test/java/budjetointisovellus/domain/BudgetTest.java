@@ -15,41 +15,38 @@ public class BudgetTest {
 
     @Before
     public void setUp() {
-        budget = new Budget("New Budget");
-    }
-
-    @Test
-    public void setNameGetName() {
-        budget.setName("Test name");
-        assertEquals("Test name", budget.getName());
+        budget = new Budget("New Budget", new User("User"));
     }
 
     @Test
     public void setEventToBudget() {
-        budget.setEvent("income", 100);
-
-        assertEquals(1, budget.getEvents().size());
+        budget.setTransaction("income", 100);
+        assertEquals(1, budget.getTransactions().size());
     }
 
     @Test
     public void removeEvent() {
-        budget.setEvent("income", 100);
-        budget.getEvents().remove(new Transaction("income", 0));
-
-        assertEquals(0, budget.getEvents().size());
+        budget.setTransaction("income", 100);
+        budget.getTransactions().remove(new Transaction("income", 0));
+        assertEquals(0, budget.getTransactions().size());
     }
 
     @Test
     public void getCorrectBalance() {
-        budget.setEvent("income", 1000);
-        assertEquals(1000, budget.getBalance());
+        budget.setTransaction("income", 1000);
+        budget.setTransaction("expense", -500);
+        assertEquals(500, budget.getBalance());
     }
-    
+
     @Test
-    public void correctOutput() {
-        budget.setEvent("income", 500);
-        assertEquals("New Budget, 500", budget.toString());
+    public void notEqualWithDifferentUser() {
+        Budget anotherBudget = new Budget("New Budget", new User("UserB"));
+        assertFalse(budget.equals(anotherBudget));
     }
-    
+
+    public void notEqualWithDifferentName() {
+        Budget anotherBudget = new Budget("Another Budget", new User("UserB"));
+        assertFalse(budget.equals(anotherBudget));
+    }
 
 }

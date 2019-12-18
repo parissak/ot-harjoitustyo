@@ -3,6 +3,7 @@ package budjetointisovellus.dao;
 import budjetointisovellus.dao.BudgetDao;
 import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.Transaction;
+import budjetointisovellus.domain.User;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,34 +21,41 @@ public class FileBudgetDao implements BudgetDao {
 
     public List<Budget> budgetList;
     private String budgetFile;
+    private UserDao userDao;
 
-    /**
-     * Lukee tietokannasta tiedot ohjelmaan tietorakenteisiin. Mikäli
-     * tietokantaa ei ole, niin luo sellaisen.
-     *
-     * @param file tekstitiedoston nimi.
-     */
-    public FileBudgetDao(String file) throws Exception {
+    public FileBudgetDao(String file, UserDao users) throws Exception {
         this.budgetList = new ArrayList<>();
         this.budgetFile = file;
+        this.userDao = users;
+        readFile();
+    }
 
+    /**
+     * Kutsutaan käynnistyksen yhteydessä. Lukee tietokannasta tiedot ohjelmaan 
+     * tietorakenteisiin. Mikäli tietokantaa ei ole, niin luo sellaisen.
+     */
+    private void readFile() throws IOException {
         try {
             Scanner reader = new Scanner(new File(this.budgetFile));
             while (reader.hasNextLine()) {
                 String[] parts = reader.nextLine().split(";");
-                String budgetName = parts[0];
-                String eventName = parts[1];
-                Integer eventAmount = Integer.parseInt(parts[2]);
+                User user = userDao.getAll().stream().filter(u -> u.getUsername()
+                        .equals(parts[0])).findFirst().orElse(new User(parts[0]));
+                String budgetName = parts[1];
+                String eventName = parts[2];
+                Integer eventAmount = Integer.parseInt(parts[3]);
 
-                Budget budget = findOne(budgetName);
+                Budget budget = findBudget(budgetName, user);
 
-                if (budgetList.contains(budget)) {
-                    budget.setEvent(eventName, eventAmount);
-                } else {
-                    budget.setEvent(eventName, eventAmount);
+                if (eventAmount != 0) {
+                    budget.setTransaction(eventName, eventAmount);
+                }
+
+                if (!budgetList.contains(budget)) {
                     budgetList.add(budget);
                 }
             }
+
         } catch (Exception e) {
             System.out.println("Initializing new budget file");
             FileWriter writer = new FileWriter(new File(budgetFile));
@@ -62,12 +70,14 @@ public class FileBudgetDao implements BudgetDao {
      *
      * @param name annettu budjetin nimi
      */
-    private Budget findOne(String name) {
-        Budget budget = budgetList.stream()
-                .filter(b -> b.getName().equals(name)).findFirst()
-                .orElse(new Budget(name));
-
-        return budget;
+    private Budget findBudget(String budgetName, User user) {
+        return budgetList.stream()
+                .filter(b -> b.getName()
+                .equals(budgetName))
+                .filter(b -> b.getUser()
+                .equals(user))
+                .findFirst()
+                .orElse(new Budget(budgetName, user));
     }
 
     /**
@@ -77,15 +87,16 @@ public class FileBudgetDao implements BudgetDao {
     private void save() throws Exception {
         try (FileWriter writer = new FileWriter(budgetFile)) {
 
-            for (Budget one : budgetList) {
-                ArrayList<Transaction> actions = one.getEvents();
+            for (Budget budget : budgetList) {
+                ArrayList<Transaction> actions = budget.getTransactions();
+
                 if (!actions.isEmpty()) {
                     for (Transaction action : actions) {
-                        writer.write(one.getName() + ";" + action.getName() + ";"
+                        writer.write(budget.getUser().getUsername() + ";" + budget.getName() + ";" + action.getName() + ";"
                                 + action.getAmount() + "\n");
                     }
                 } else {
-                    writer.write(one.getName() + ";" + "0" + ";" + "0" + "\n");
+                    writer.write(budget.getUser().getUsername() + ";" + budget.getName() + ";" + "0" + ";" + "0" + "\n");
                 }
             }
         } catch (Exception e) {
@@ -112,8 +123,8 @@ public class FileBudgetDao implements BudgetDao {
      * @param name erän nimi.
      * @param amount erän määrä.
      */
-    public void create(Budget budget, String name, int amount) throws Exception {
-        budget.setEvent(name, amount);
+    public void createTransaction(Budget budget, String name, int amount) throws Exception {
+        budget.setTransaction(name, amount);
         save();
     }
 
@@ -123,8 +134,8 @@ public class FileBudgetDao implements BudgetDao {
      * @param budget haettu budjetti-olio.
      * @param eventName erän nimi.
      */
-    public void remove(Budget budget, String eventName) throws Exception {
-        budget.getEvents().remove(new Transaction(eventName, 0));
+    public void removeTransaction(Budget budget, String eventName) throws Exception {
+        budget.getTransactions().remove(new Transaction(eventName, 0));
         save();
     }
 
