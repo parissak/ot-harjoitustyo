@@ -8,4 +8,5 @@
 03.12. | 8h | Tekstitiedostoon tallennus ja sieltä lukeminen, asiaan kuuluvan DAO:n luonti ja viikon vaatimusten toteutusta
 09.12. | 7h | JavaFx:n käyttämisen opettelu ja käyttöliittymän tekeminen 
 10.12. | 4h | Transaction-luokan lisääminen ja viikon vaatimusten toteutusta
-**Yht.** | 30,5h |
+15.12. | 3h | Käyttöliittymän syötteiden validointi ja liittyvien virheviestin näyttäminen, scrollbarin lisäykset ja summan näyttäminen. 
+**Yht.** | 33,5h |
