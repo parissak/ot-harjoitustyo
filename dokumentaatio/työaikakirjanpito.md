@@ -10,4 +10,6 @@
 10.12. | 4h | Transaction-luokan lisääminen ja viikon vaatimusten toteutusta
 15.12. | 3h | Käyttöliittymän syötteiden validointi ja liittyvien virheviestin näyttäminen, scrollbarin lisäykset ja summan näyttäminen. 
 17.12. | 5h | Käyttäjäluokan lisäys käyttöliittymään ja ohjelmakoodiin
-**Yht.** | 38,5h |
+19.12. | 3h | Tietokannan toteutus
+20.12. | 4h | Tietokannan toteutus
+**Yht.** | 45,5h |
