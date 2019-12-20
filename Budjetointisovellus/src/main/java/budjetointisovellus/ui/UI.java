@@ -1,7 +1,7 @@
 package budjetointisovellus.ui;
 
-import budjetointisovellus.dao.FileBudgetDao;
-import budjetointisovellus.dao.FileUserDao;
+import budjetointisovellus.dao.DBBudgetDao;
+import budjetointisovellus.dao.DBUserDao;
 import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.BudgetService;
 import budjetointisovellus.domain.Transaction;
@@ -57,11 +57,9 @@ public class UI extends Application {
 
     @Override
     public void init() throws Exception {
-        String budgetFile = "budgets.txt";
-        String userFile = "users.txt";
 
-        FileUserDao userDao = new FileUserDao(userFile);
-        FileBudgetDao budgetDao = new FileBudgetDao(budgetFile, userDao);
+        DBUserDao userDao = new DBUserDao();
+        DBBudgetDao budgetDao = new DBBudgetDao(userDao);
         this.service = new BudgetService(budgetDao, userDao);
     }
 
@@ -191,7 +189,7 @@ public class UI extends Application {
         Button entryButton = new Button("Edit entries");
 
         removeButton.setOnAction(e -> {
-            service.removeBudget(budget.getName());
+            service.removeBudget(budget);
             redrawBudgets();
         });
 
@@ -227,7 +225,7 @@ public class UI extends Application {
         hBox.getChildren().addAll(label, spacer, removeButton);
 
         removeButton.setOnAction(eb -> {
-            service.removeBudgetEvent(budget.getName(), transaction.getName());
+            service.removeBudgetEvent(budget.getName(), transaction);
             redrawEntries();
             updateBudgetSum();
         });
@@ -325,12 +323,12 @@ public class UI extends Application {
      * Päivittää budjetin summan ja maalaa punaiseksi jos summa on negatiivinen.
      */
     private void updateBudgetSum() {
-        if (this.budget.getBalance() < 0) {
-            sumLabel.setTextFill(Color.RED);
-        } else {
-            sumLabel.setTextFill(Color.BLACK);
-        }
-        this.sumLabel.setText("Total: " + this.budget.getBalance());
+//        if (this.budget.getBalance() < 0) {
+//            sumLabel.setTextFill(Color.RED);
+//        } else {
+//            sumLabel.setTextFill(Color.BLACK);
+//        }
+        this.sumLabel.setText("Total: " + service.balance(budget));
     }
 
     @Override
@@ -350,7 +348,7 @@ public class UI extends Application {
     }
 
     private boolean validateNumberField(String toBeParsed) {
-        if (!toBeParsed.matches("^-?[1-9][0-9]+$") || toBeParsed.isEmpty()) {
+        if (!toBeParsed.matches("^-?[1-9]?[0-9]+$") || toBeParsed.isEmpty()) {
             Alert errorAlert = new Alert(AlertType.ERROR);
             errorAlert.setHeaderText("Input not valid");
             errorAlert.setContentText("Amount must only contain digits");

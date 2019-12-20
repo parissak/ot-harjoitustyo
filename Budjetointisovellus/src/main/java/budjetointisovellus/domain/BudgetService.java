@@ -3,11 +3,14 @@ package budjetointisovellus.domain;
 import budjetointisovellus.dao.BudgetDao;
 import budjetointisovellus.dao.UserDao;
 import budjetointisovellus.domain.Budget;
+import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -25,39 +28,15 @@ public class BudgetService {
         this.userDao = userDao;
     }
 
-    /**
-     * Pyytää rajapintaa luomaan uuden budjetin.
-     *
-     * @name budjettia kuvaava nimi käyttäjän syöttämässä muodossa.
-     */
-    public boolean createBudget(String name) {
-        Budget budget = new Budget(name, loggedIn);
-
-        try {
-            budgetDao.create(budget);
-        } catch (Exception ex) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean createUser(String name) {
-        if (userDao.findByUsername(name) != null) {
-            return false;
-        }
-
-        User user = new User(name);
-
-        try {
-            userDao.create(user);
-        } catch (Exception ex) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean logIn(String username) {
-        User user = userDao.findByUsername(username);
+        User user = null;
+
+        try {
+            user = userDao.findByUsername(username);
+        } catch (SQLException ex) {
+            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         if (user == null) {
             return false;
         }
@@ -72,22 +51,50 @@ public class BudgetService {
     }
 
     /**
+     * Pyytää rajapintaa luomaan uuden budjetin.
+     *
+     * @name budjettia kuvaava nimi käyttäjän syöttämässä muodossa.
+     */
+    public boolean createBudget(String name) {
+        Budget budget = new Budget(name, loggedIn);
+
+        try {
+            budgetDao.create(budget);
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex);
+            return false;
+        }
+    }
+
+    public boolean createUser(String name) {
+        try {
+            if (userDao.findByUsername(name) != null) {
+                return false;
+            }
+            User user = new User(name);
+            userDao.create(user);
+            return true;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    /**
      * Pyytää rajapintaa poistamaan budjetin.
      *
      * @budgetName käyttäjän syöttämä budjetin nimi.
      */
-    public boolean removeBudget(String budgetName) {
+    public boolean removeBudget(Budget budget) {
         try {
-            for (Budget one : budgetDao.getBudgets()) {
-                if (one.getName().equals(budgetName) && one.getUser().equals(loggedIn)) {
-                    budgetDao.remove(one);
-                    return true;
-                }
-            }
+            budgetDao.remove(budget);
+            return true;
         } catch (Exception ex) {
+            System.out.println(ex);
             return false;
         }
-        return false;
     }
 
     /**
@@ -96,10 +103,15 @@ public class BudgetService {
      * @return palauttaa haetut budjetit.
      */
     public List<Budget> getBudgets() {
-        return budgetDao.getBudgets()
-                .stream()
-                .filter(t -> t.getUser().equals(loggedIn))
-                .collect(Collectors.toList());
+        try {
+            return budgetDao.getBudgets()
+                    .stream()
+                    .filter(t -> t.getUser().equals(loggedIn))
+                    .collect(Collectors.toList());
+        } catch (SQLException ex) {
+            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<Budget>();
     }
 
     /**
@@ -123,19 +135,33 @@ public class BudgetService {
         return false;
     }
 
+    public int balance(Budget budget) {
+        try {
+            return budgetDao.getBudgets()
+                    .stream()
+                    .filter(u -> u.getUser().equals(loggedIn))
+                    .filter(b -> b.getName().equals(budget.getName()))
+                    .mapToInt(t -> t.getBalance()).sum();
+        } catch (SQLException ex) {
+            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
     /**
      * Pyytää rajapinnalta tiettyyn budjettiin liittyvät erät.
      *
      * @name käyttäjän syöttämä budjetin nimi.
      * @return saadut erät listana.
      */
-    public ArrayList getBudgetEvents(String name) {
-        ArrayList<Transaction> list = new ArrayList<>();
+    public List<Transaction> getBudgetEvents(String name) {
+        List<Transaction> list = new ArrayList<>();
 
-        for (Budget budget : budgetDao.getBudgets()) {
-            if (budget.getName().equals(name) && budget.getUser().equals(loggedIn)) {
-                list = budget.getTransactions();
-            }
+        try {
+            list = budgetDao.getTransactions(loggedIn, name);
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
@@ -146,11 +172,11 @@ public class BudgetService {
      * @budgetName käyttäjän syöttämä budjetin nimi.
      * @name käyttäjän syöttämä erän nimi.
      */
-    public boolean removeBudgetEvent(String budgetName, String name) {
+    public boolean removeBudgetEvent(String budgetName, Transaction transaction) {
         try {
             for (Budget one : budgetDao.getBudgets()) {
                 if (one.getName().equals(budgetName) && one.getUser().equals(loggedIn)) {
-                    budgetDao.removeTransaction(one, name);
+                    budgetDao.removeTransaction(one, transaction);
                 }
             }
         } catch (Exception ex) {

@@ -1,6 +1,6 @@
 package budjetointisovellus;
 
-import budjetointisovellus.dao.FileBudgetDao;
+import budjetointisovellus.dao.DBBudgetDao;
 import budjetointisovellus.domain.BudgetService;
 import budjetointisovellus.domain.User;
 import budjetointisovellus.ui.UI;

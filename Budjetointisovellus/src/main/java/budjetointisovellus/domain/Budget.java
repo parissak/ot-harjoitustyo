@@ -16,10 +16,6 @@ public class Budget {
     private ArrayList<Transaction> events;
     private User user;
 
-//    public Budget(String name) {
-//        this.name = name;
-//        this.events = new ArrayList<>();
-//    }
     public Budget(String name, User loggedIn) {
         this.user = loggedIn;
         this.name = name;
@@ -35,11 +31,11 @@ public class Budget {
     }
 
     public ArrayList getTransactions() {
-        return events;
+        return this.events;
     }
 
     public void setTransaction(String name, int amount) {
-        events.add(new Transaction(name, amount));
+        this.events.add(new Transaction(name, amount));
     }
 
     public String getName() {
@@ -67,24 +63,24 @@ public class Budget {
         return this.name + ", " + getBalance();
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        final Budget other = (Budget) obj;
-
-        if (other.getUser().equals(this.user) && other.getName().equals(this.name)) {
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//
+//        final Budget other = (Budget) obj;
+//
+//        if (other.getUser().equals(this.user) && other.getName().equals(this.name)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
 }
