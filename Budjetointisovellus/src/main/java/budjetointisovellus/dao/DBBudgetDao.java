@@ -29,7 +29,6 @@ public class DBBudgetDao implements BudgetDao {
     public DBBudgetDao(UserDao users) throws Exception {
         this.userDao = users;
         createBudgetTable();
-        createTransactionTable();
     }
 
     /**
@@ -39,7 +38,7 @@ public class DBBudgetDao implements BudgetDao {
      *
      * @param name annettu budjetin nimi
      */
-    private Budget findBudget(String budgetName, User user, List<Budget> list) {
+    public Budget findBudget(String budgetName, User user, List<Budget> list) {
         return list.stream()
                 .filter(b -> b.getName()
                 .equals(budgetName))
@@ -91,57 +90,15 @@ public class DBBudgetDao implements BudgetDao {
         stmt.setString(2, user.getUsername());
 
         ResultSet rs = stmt.executeQuery();
-        System.out.println("hyy");
+
         while (rs.next()) {
             int sum = rs.getInt("Sum");
-            System.out.println(sum);
         }
 
         rs.close();
         stmt.close();
         conn.close();
 
-    }
-
-    /**
-     * Lisää tietorakenteeseen erän budjetille ja kutsuu tietokantaan
-     * tallentamista.
-     *
-     * @param budget haettu budjetti-olio.
-     * @param name erän nimi.
-     * @param amount erän määrä.
-     */
-    public void createTransaction(Budget budget, String name, int amount) throws Exception {
-        Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO Transaction (name, amount, budget_name) "
-                + "VALUES (?,?,?);");
-        stmt.setString(1, name);
-        stmt.setInt(2, amount);
-        stmt.setString(3, budget.getName());
-        stmt.executeUpdate();
-
-        conn.close();
-
-    }
-
-    /**
-     * Poistaa budjetista tietyn erän ja kutsuu tietokantaan tallentamista.
-     *
-     * @param budget haettu budjetti-olio.
-     * @param eventName erän nimi.
-     */
-    public void removeTransaction(Budget budget, Transaction transaction) throws Exception {
-        Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
-        PreparedStatement stmt = conn.prepareStatement("DELETE FROM TRANSACTION "
-                + " WHERE budget_name = (?)"
-                + " AND transaction.name = (?)"
-                + " AND amount = (?);");
-        stmt.setString(1, budget.getName());
-        stmt.setString(2, transaction.getName());
-        stmt.setInt(3, transaction.getAmount());
-        stmt.executeUpdate();
-        stmt.close();
-        conn.close();
     }
 
     /**
@@ -169,7 +126,7 @@ public class DBBudgetDao implements BudgetDao {
      * @return lista budjeteista.
      */
     @Override
-    public List<Budget> getBudgets() throws SQLException {
+    public List<Budget> getAll() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
         PreparedStatement stmt = conn.prepareStatement("SELECT budget.id, budget.name, "
                 + "transaction.name, amount, user.name FROM BUDGET "
@@ -205,47 +162,11 @@ public class DBBudgetDao implements BudgetDao {
         return list;
     }
 
-    @Override
-    public List<Transaction> getTransactions(User user, String budgetName) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Budget\n"
-                + " JOIN Transaction ON budget.name = budget_name"
-                + " JOIN User ON user_id = user.id"
-                + " WHERE user.name = (?)"
-                + " AND budget.name = (?);");
-        stmt.setString(1, user.getUsername());
-        stmt.setString(2, budgetName);
-
-        ResultSet rs = stmt.executeQuery();
-        List<Transaction> actions = new ArrayList<>();
-
-        while (rs.next()) {
-            Transaction action = new Transaction(rs.getString("transaction.name"), rs.getInt("amount"));
-            actions.add(action);
-        }
-
-        rs.close();
-        conn.close();
-        stmt.close();
-
-        return actions;
-    }
-
-    
     private void createBudgetTable() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
-        conn.prepareStatement("CREATE TABLE IF NOT EXISTS Budget "
-                + "(id IDENTITY AUTO_INCREMENT, name varchar(15), user_id INTEGER, "
-                + "FOREIGN KEY (user_id) REFERENCES user(id));").executeUpdate();
-        conn.close();
-    }
-
-    private void createTransactionTable() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
-        conn.prepareStatement("CREATE TABLE IF NOT EXISTS Transaction "
-                + "(id IDENTITY AUTO_INCREMENT, name varchar(15), amount integer, budget_name varchar(15), "
-                + "FOREIGN KEY (budget_name) REFERENCES "
-                + "Budget(name));").executeUpdate();
+        conn.prepareStatement("CREATE TABLE IF NOT EXISTS Budget"
+                + " (id IDENTITY AUTO_INCREMENT, name varchar(15), user_id INTEGER,"
+                + " FOREIGN KEY (user_id) REFERENCES user(id));").executeUpdate();
         conn.close();
     }
 

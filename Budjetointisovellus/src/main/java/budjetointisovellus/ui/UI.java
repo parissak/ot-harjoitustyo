@@ -1,6 +1,7 @@
 package budjetointisovellus.ui;
 
 import budjetointisovellus.dao.DBBudgetDao;
+import budjetointisovellus.dao.DBTransactionDao;
 import budjetointisovellus.dao.DBUserDao;
 import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.BudgetService;
@@ -60,7 +61,8 @@ public class UI extends Application {
 
         DBUserDao userDao = new DBUserDao();
         DBBudgetDao budgetDao = new DBBudgetDao(userDao);
-        this.service = new BudgetService(budgetDao, userDao);
+        DBTransactionDao transactionDao = new DBTransactionDao();
+        this.service = new BudgetService(budgetDao, userDao, transactionDao);
     }
 
     /**
@@ -225,7 +227,7 @@ public class UI extends Application {
         hBox.getChildren().addAll(label, spacer, removeButton);
 
         removeButton.setOnAction(eb -> {
-            service.removeBudgetEvent(budget.getName(), transaction);
+            service.removeBudgetEvent(this.budget, transaction);
             redrawEntries();
             updateBudgetSum();
         });
@@ -265,7 +267,7 @@ public class UI extends Application {
 
         addEntryButton.setOnAction(eb -> {
             if (validateStringField(nameField.getText()) && validateNumberField(amountField.getText())) {
-                service.addTransactionToBudget(budget.getName(), nameField.getText(),
+                service.addTransactionToBudget(budget, nameField.getText(),
                         Integer.valueOf(amountField.getText()));
                 redrawEntries();
                 updateBudgetSum();
@@ -309,7 +311,7 @@ public class UI extends Application {
     private void redrawEntries() {
         entryNodes.getChildren().clear();
 
-        List<Transaction> list = service.getBudgetEvents(this.budget.getName());
+        List<Transaction> list = service.getBudgetTransactions(this.budget);
         list.forEach(Transaction -> {
             entryNodes.getChildren().add(createEntryNode(Transaction));
         });
@@ -320,14 +322,9 @@ public class UI extends Application {
     }
 
     /**
-     * Päivittää budjetin summan ja maalaa punaiseksi jos summa on negatiivinen.
+     * Päivittää budjetin summan.
      */
     private void updateBudgetSum() {
-//        if (this.budget.getBalance() < 0) {
-//            sumLabel.setTextFill(Color.RED);
-//        } else {
-//            sumLabel.setTextFill(Color.BLACK);
-//        }
         this.sumLabel.setText("Total: " + service.balance(budget));
     }
 

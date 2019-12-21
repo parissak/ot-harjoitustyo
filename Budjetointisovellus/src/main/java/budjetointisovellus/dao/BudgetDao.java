@@ -13,12 +13,6 @@ public interface BudgetDao {
 
     void remove(Budget budget) throws SQLException;
 
-    List<Budget> getBudgets() throws SQLException;
+    List<Budget> getAll() throws SQLException;
     
-    List<Transaction> getTransactions(User user, String budgetName) throws SQLException;
-    
-    void createTransaction(Budget budget, String name, int amount) throws Exception;
-
-    void removeTransaction(Budget budget, Transaction transaction) throws Exception;
-
 }
