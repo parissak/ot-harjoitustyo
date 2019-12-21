@@ -12,7 +12,5 @@ public interface TransactionDao {
     
     void remove(Budget budget, Transaction transaction) throws SQLException;
 
-    Integer read(Transaction transaction) throws SQLException;
-
-    List<Transaction> getAll(User user, Budget budget) throws SQLException;
+    List<Transaction> getUserBudgetsTransactions(User user, Budget budget) throws SQLException;
 }

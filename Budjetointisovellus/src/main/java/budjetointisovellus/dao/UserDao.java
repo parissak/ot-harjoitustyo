@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    User create(User user) throws SQLException;
+    void create(User user) throws SQLException;
     
     User findByUsername(String username) throws SQLException;
     

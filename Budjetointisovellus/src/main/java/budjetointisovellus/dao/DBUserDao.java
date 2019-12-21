@@ -1,9 +1,6 @@
 package budjetointisovellus.dao;
 
 import budjetointisovellus.domain.User;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,9 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DBUserDao implements UserDao {
 
@@ -21,8 +15,13 @@ public class DBUserDao implements UserDao {
         createUserTable();
     }
 
+    /**
+     * Tallentaa käyttäjän tietokantaan.
+     *
+     * @param user käyttäjä-olio.
+     */
     @Override
-    public User create(User user) throws SQLException {
+    public void create(User user) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO User (name) VALUES (?)");
         stmt.setString(1, user.getUsername());
@@ -31,9 +30,14 @@ public class DBUserDao implements UserDao {
         stmt.close();
         conn.close();
 
-        return user;
     }
 
+    /**
+     * Tarkistaa löytyykö nimimerkillä käyttäjää tietokannasta.
+     *
+     * @param username nimimerkki.
+     * @return käyttäjä-olio sen löytyessä tai muuten null.
+     */
     @Override
     public User findByUsername(String username) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
@@ -47,11 +51,17 @@ public class DBUserDao implements UserDao {
 
         User user = new User(rs.getString("name"));
 
+        rs.close();
         stmt.close();
         conn.close();
         return user;
     }
 
+    /**
+     * Palauttaa listan käyttäjistä.
+     *
+     * @return lista käyttäjä-olioista.
+     */
     @Override
     public List<User> getAll() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
@@ -73,6 +83,12 @@ public class DBUserDao implements UserDao {
 
     }
 
+    /**
+     * Palauttaa käyttäjään liittyvän pääavaimen.
+     *
+     * @param user käyttäjä.
+     * @return pääavain.
+     */
     @Override
     public Integer read(User user) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");

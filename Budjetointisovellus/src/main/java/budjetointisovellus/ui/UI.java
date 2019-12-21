@@ -7,15 +7,10 @@ import budjetointisovellus.domain.Budget;
 import budjetointisovellus.domain.BudgetService;
 import budjetointisovellus.domain.Transaction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -61,7 +56,7 @@ public class UI extends Application {
 
         DBUserDao userDao = new DBUserDao();
         DBBudgetDao budgetDao = new DBBudgetDao(userDao);
-        DBTransactionDao transactionDao = new DBTransactionDao();
+        DBTransactionDao transactionDao = new DBTransactionDao(budgetDao);
         this.service = new BudgetService(budgetDao, userDao, transactionDao);
     }
 
@@ -227,7 +222,7 @@ public class UI extends Application {
         hBox.getChildren().addAll(label, spacer, removeButton);
 
         removeButton.setOnAction(eb -> {
-            service.removeBudgetEvent(this.budget, transaction);
+            service.removeTransaction(this.budget, transaction);
             redrawEntries();
             updateBudgetSum();
         });
@@ -267,7 +262,7 @@ public class UI extends Application {
 
         addEntryButton.setOnAction(eb -> {
             if (validateStringField(nameField.getText()) && validateNumberField(amountField.getText())) {
-                service.addTransactionToBudget(budget, nameField.getText(),
+                service.createTransaction(budget, nameField.getText(),
                         Integer.valueOf(amountField.getText()));
                 redrawEntries();
                 updateBudgetSum();
@@ -299,7 +294,7 @@ public class UI extends Application {
     public void redrawBudgets() {
         budgetNodes.getChildren().clear();
 
-        List<Budget> budgetList = service.getBudgets();
+        List<Budget> budgetList = service.getUserBudgets();
         budgetList.forEach(budget -> {
             budgetNodes.getChildren().add(createBudgetNode(budget));
         });
@@ -325,7 +320,12 @@ public class UI extends Application {
      * Päivittää budjetin summan.
      */
     private void updateBudgetSum() {
-        this.sumLabel.setText("Total: " + service.balance(budget));
+        if (this.budget.getBalance() < 0) {
+            sumLabel.setTextFill(Color.RED);
+        } else {
+            sumLabel.setTextFill(Color.BLACK);
+        }
+        this.sumLabel.setText("Total: " + budget.getBalance());
     }
 
     @Override

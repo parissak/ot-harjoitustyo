@@ -9,6 +9,11 @@ public class Transaction {
 
     private String name;
     private int amount;
+    
+     public Transaction(String name, int amount) {
+        this.name = name;
+        this.amount = amount;
+    }
 
     public String getName() {
         return name;
@@ -26,15 +31,9 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Transaction(String name, int amount) {
-        this.name = name;
-        this.amount = amount;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -46,8 +45,13 @@ public class Transaction {
         if (obj == null) {
             return false;
         }
-
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         final Transaction other = (Transaction) obj;
+        if (this.amount != other.amount) {
+            return false;
+        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }

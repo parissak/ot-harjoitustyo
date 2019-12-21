@@ -13,13 +13,15 @@ import java.util.List;
 
 public class DBTransactionDao implements TransactionDao {
 
-    public DBTransactionDao() throws SQLException {
+    private BudgetDao budgetDao;
+
+    public DBTransactionDao(BudgetDao budgetDao) throws SQLException {
+        this.budgetDao = budgetDao;
         createTransactionTable();
     }
 
     /**
-     * Lisää tietorakenteeseen erän budjetille ja kutsuu tietokantaan
-     * tallentamista.
+     * Lisää tietorakenteeseen erän budjetille ja tallentaa tietokantaan.
      *
      * @param budget haettu budjetti-olio.
      * @param name erän nimi.
@@ -38,13 +40,16 @@ public class DBTransactionDao implements TransactionDao {
         conn.close();
     }
 
+    /**
+     * Hakee tietokannasta tietyn käyttäjän budjettiin liittyvät erät.
+     *
+     * @param budget haettu budjetti-olio.
+     * @param name erän nimi.
+     * @param amount erän määrä.
+     * @return lista eristä.
+     */
     @Override
-    public Integer read(Transaction transaction) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Transaction> getAll(User user, Budget budget) throws SQLException {
+    public List<Transaction> getUserBudgetsTransactions(User user, Budget budget) throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Budget\n"
                 + " JOIN Transaction ON budget.name = budget_name"
@@ -63,26 +68,17 @@ public class DBTransactionDao implements TransactionDao {
         }
 
         rs.close();
-        conn.close();
         stmt.close();
+        conn.close();
 
         return actions;
     }
 
-    private void createTransactionTable() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
-        conn.prepareStatement("CREATE TABLE IF NOT EXISTS Transaction "
-                + "(id IDENTITY AUTO_INCREMENT, name varchar(15), amount integer, budget_name varchar(15), "
-                + "FOREIGN KEY (budget_name) REFERENCES "
-                + "Budget(name) ON DELETE CASCADE);").executeUpdate();
-        conn.close();
-    }
-
     /**
-     * Poistaa budjetista tietyn erän ja kutsuu tietokantaan tallentamista.
+     * Poistaa budjetista tietyn erän ja tallentaa tietokantaan.
      *
-     * @param budget haettu budjetti-olio.
-     * @param eventName erän nimi.
+     * @param budget budjetti-olio.
+     * @param transaction erään liittyvä olio.
      */
     @Override
     public void remove(Budget budget, Transaction transaction) throws SQLException {
@@ -98,5 +94,13 @@ public class DBTransactionDao implements TransactionDao {
         stmt.close();
         conn.close();
     }
-
+    
+     private void createTransactionTable() throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
+        conn.prepareStatement("CREATE TABLE IF NOT EXISTS Transaction "
+                + "(id IDENTITY AUTO_INCREMENT, name varchar(15), amount integer, budget_name varchar(15), "
+                + "FOREIGN KEY (budget_name) REFERENCES "
+                + "Budget(name) ON DELETE CASCADE);").executeUpdate();
+        conn.close();
+    }
 }

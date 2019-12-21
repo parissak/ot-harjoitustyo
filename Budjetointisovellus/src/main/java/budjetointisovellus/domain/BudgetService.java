@@ -3,16 +3,10 @@ package budjetointisovellus.domain;
 import budjetointisovellus.dao.BudgetDao;
 import budjetointisovellus.dao.TransactionDao;
 import budjetointisovellus.dao.UserDao;
-import budjetointisovellus.domain.Budget;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Sovelluslogiikasta vastaava luokka, joka välittää pyynnöt tietokantaa
@@ -75,6 +69,7 @@ public class BudgetService {
             budgetDao.create(budget);
             return true;
         } catch (Exception ex) {
+            System.out.println(ex);
             return false;
         }
     }
@@ -112,38 +107,44 @@ public class BudgetService {
             budgetDao.remove(budget);
             return true;
         } catch (Exception ex) {
-            System.out.println(ex);
             return false;
         }
     }
 
     /**
-     * Pyytää rajapinnalta nimimerkin luomat budjetit.
+     * Pyytää rajapinnalta käyttäjän budjetit ja budjettiin liittyvät erät ja
+     * yhdistää nämä.
      *
      * @return palauttaa haetut budjetit listana tai budjettien puuttuessa tyhjä
      * lista.
      */
-    public List<Budget> getBudgets() {
+    public List<Budget> getUserBudgets() {
         try {
-            return budgetDao.getAll()
-                    .stream()
-                    .filter(t -> t.getUser().equals(loggedIn))
-                    .collect(Collectors.toList());
+            List<Budget> budgets = budgetDao.getUserBudgets(loggedIn);
+            for (Budget budget : budgets) {
+                List<Transaction> actions
+                        = transactionDao.getUserBudgetsTransactions(loggedIn, budget);
+                budget.setTransactions(actions);
+            }
+
+            return budgets;
         } catch (SQLException ex) {
-            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<Budget>();
     }
 
     /**
-     * Pyytää rajapintaa lisäämään erän tiettyyn budjettiin.
+     * Pyytää rajapintaa lisäämään erän tiettyyn budjettiin. Lisää myös
+     * budjetti-olioon erän, jotta budjetin summa tulostuu oikein 
+     * käyttöliittymässä.
      *
      * @budget käyttäjän valitsema budjetti.
      * @name käyttäjän syöttämä erän nimi.
      * @amount käyttäjän syöttämä lukumäärä erälle.
      * @return true jos lisääminen onnistuu, muuten false
      */
-    public boolean addTransactionToBudget(Budget budget, String actionName, int amount) {
+    public boolean createTransaction(Budget budget, String actionName, int amount) {
+        budget.setTransaction(new Transaction(actionName, amount));
         try {
             transactionDao.create(budget, actionName, amount);
             return true;
@@ -152,30 +153,17 @@ public class BudgetService {
         }
     }
 
-    public int balance(Budget budget) {
-        try {
-            return budgetDao.getAll()
-                    .stream()
-                    .filter(u -> u.getUser().equals(loggedIn))
-                    .filter(b -> b.getName().equals(budget.getName()))
-                    .mapToInt(t -> t.getBalance()).sum();
-        } catch (SQLException ex) {
-            Logger.getLogger(BudgetService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
-    }
-
     /**
      * Pyytää rajapinnalta tiettyyn budjettiin liittyvät erät.
      *
-     * @name käyttäjän syöttämä budjetin nimi.
+     * @budget budjetti.
      * @return saadut erät listana tai erien puuttuessa tyhjä lista
      */
     public List<Transaction> getBudgetTransactions(Budget budget) {
         List<Transaction> list = new ArrayList<>();
 
         try {
-            list = transactionDao.getAll(loggedIn, budget);
+            list = transactionDao.getUserBudgetsTransactions(loggedIn, budget);
             return list;
         } catch (SQLException ex) {
         }
@@ -183,13 +171,18 @@ public class BudgetService {
     }
 
     /**
-     * Pyytää rajapintaa poistamaan tietyn budjetin tietyn erän.
+     * Pyytää rajapintaa poistamaan tietyn budjetin tietyn erän. Poistaa myös
+     * budjetti-oliolta erän, jotta budjetin summa tulostuu oikein 
+     * käyttöliittymässä.
      *
      * @budget käyttäjän valitsema budjetti.
      * @transaction käyttäjän valitsema erä.
      * @return true jos poistaminen onnistui, muuten false
      */
-    public boolean removeBudgetEvent(Budget budget, Transaction transaction) {
+    public boolean removeTransaction(Budget budget, Transaction transaction) {
+        budget.removeTransaction(new Transaction(transaction.getName(), 
+                transaction.getAmount()));
+        
         try {
             transactionDao.remove(budget, transaction);
         } catch (Exception ex) {
@@ -197,4 +190,5 @@ public class BudgetService {
         }
         return true;
     }
+
 }
