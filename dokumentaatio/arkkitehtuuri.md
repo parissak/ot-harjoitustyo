@@ -43,3 +43,7 @@ Painikkeen painamiseen reagoiva tapahtumankäsittelijä ohjaa tarkistamaan syöt
 ![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/eran_luonti.png)
 
 Painikkeen painamiseen reagoiva tapahtumankäsittelijä ohjaa tarkistamaan syötteet ja niiden ollessa oikeanlaiset kutsuu sovelluslogiikan metodia "createTransaction" antaen parametriksi syötetyn nimen ja kokonaisluvun. Lisäksi käyttöliittymä ohjaa parametrina käsittellyn budjetti-olion. Sovelluslogiikka luo uuden erä-olion budjetilla, nimellä ja summalla. Lisäksi sovelluslogiikka liittä erän budjettiin, jotta summa päivittyy käyttöliittymässä. Rajapinta tallentaa kantaan erän tiedot. Jos toimi onnistuu, palauttaa sovelluslogiikka käyttöliittymälle toden. Tämän jälkeen käyttöliittymä päivittää eriin liittyvät tiedot ja budjetin summan. 
+
+## Ohjelman rakenteeseen jääneet heikkoudet
+
+Käyttöliittymä-luokka on todella pitkä ja hajanainen, joten se tulisi eriyttää mahdollisesti useisiin luokkiin. Tietokantaan ja sen yhteyteen liittyvän luokan luominen selkeyttäisi rakennetta, testauksen toimminnallisuutta ja vähentäisi toisteista koodia. 
