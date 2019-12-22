@@ -1,5 +1,12 @@
 # Arkkitehtuurikuvaus
 
+## Rakenne
+
+Ohjelman rakenne noudattelee kolmitasoista kerrosarkkitehtuuria. Koodin pakkausrakenne on seuraava:
+
+
+
+
 ## Sovelluslogiikka
 Sovelluksen loogisen datamallin muodostavat luokat Budget ja Tranasction, jotka kuvaavat budjetteja ja niiden eriä.
 
