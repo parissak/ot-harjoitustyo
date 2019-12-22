@@ -29,7 +29,17 @@ Sovelluksen käynnistyksen yhteydessä sen yhteyteen muodostuu tietokantatiedost
 ## Päätoiminnallisuudet
 
 ### Käyttäjän kirjautuminen 
-![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/Budjetin%20luominen.png)
+![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/kirjautuminen.png)
+
+Painikkeen painamiseen reagoiva tapahtumankäsittelijä ohjaa tarkistamaan syötteet ja niiden ollessa oikeanlaiset kutsuu sovelluslogiikan metodia "login" antaen parametriksi kirjautuneen käyttäjätunnuksen. Sovelluslogiikka selvittää userDao:n avulla onko käyttäjätunnus olemassa. Jos on, niin käyttöliittymä vaihtaa näkymäksi käyttäjän budjetteihin liittyvän näkymän.
 
 ### Budjetin luominen
+![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/Budjetin_luominen.png)
 
+
+Painikkeen painamiseen reagoiva tapahtumankäsittelijä ohjaa tarkistamaan syötteet ja niiden ollessa oikeanlaiset kutsuu sovelluslogiikan metodia "createUser" antaen parametriksi syötetyn nimen. Sovelluslogiikka luo uuden budjetti-olion annetulla nimellä ja kirjautuneella käyttäjällä ja ohjaa kontrollin rajapinnalle. Rajapinta tallentaa kantaan budjetin tiedot, jos saman nimistä budjettia ei ole jo olemassa. Jos toimi onnistuu, palauttaa sovelluslogiikka käyttöliittymälle toden. 
+
+### Erän luonti budjetille
+![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/eran_luonti.png)
+
+Painikkeen painamiseen reagoiva tapahtumankäsittelijä ohjaa tarkistamaan syötteet ja niiden ollessa oikeanlaiset kutsuu sovelluslogiikan metodia "createTransaction" antaen parametriksi syötetyn nimen ja kokonaisluvun. Lisäksi käyttöliittymä ohjaa parametrina käsittellyn budjetti-olion. Sovelluslogiikka luo uuden erä-olion budjetilla, nimellä ja summalla. Lisäksi sovelluslogiikka liittä erän budjettiin, jotta summa päivittyy käyttöliittymässä. Rajapinta tallentaa kantaan erän tiedot. Jos toimi onnistuu, palauttaa sovelluslogiikka käyttöliittymälle toden. Tämän jälkeen käyttöliittymä päivittää eriin liittyvät tiedot ja budjetin summan. 
