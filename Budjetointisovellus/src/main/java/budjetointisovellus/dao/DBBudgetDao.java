@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Luokka vastaa tietokantaan ja tietorakenteeseen tallentamisesta ja tietojen
- * noutamisesta edellä mainituista kohteista.
+ * Luokka vastaa budjettien tallentamisesta tietokantaan ja sieltä hakemisesta.
  */
 public class DBBudgetDao implements BudgetDao {
 

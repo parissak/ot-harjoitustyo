@@ -9,8 +9,8 @@ public class Transaction {
 
     private String name;
     private int amount;
-    
-     public Transaction(String name, int amount) {
+
+    public Transaction(String name, int amount) {
         this.name = name;
         this.amount = amount;
     }
@@ -22,7 +22,7 @@ public class Transaction {
     public int getAmount() {
         return amount;
     }
- 
+
     @Override
     public int hashCode() {
         int hash = 7;

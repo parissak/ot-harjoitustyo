@@ -34,9 +34,7 @@ public class UI extends Application {
 
     private BudgetService service;
 
-    //käsiteltävä budjetti, voisi siirtää parametriksi
     private Budget budget;
-    //summaan liittyvä label
     private Label sumLabel = new Label();
 
     private Stage stage;
@@ -127,6 +125,9 @@ public class UI extends Application {
         this.stage.show();
     }
 
+    /**
+     * Budjetti-scene
+     */
     public void budgetScene() {
         TextField nameField = new TextField();
         nameField.setPromptText("Insert name");
@@ -174,9 +175,9 @@ public class UI extends Application {
      * Luo yhteen budjettiin littyvän Noden. Tarjoaa budjetin poistamisen ja
      * siirtymisen sen erien muokkaamiseen.
      *
-     * @param budget käyttäjän valitsema budjetti
+     * @param budget käyttäjän valitsema budjetti.
      *
-     * @return budjettiin liityvä Node
+     * @return budjettiin liityvä hBox.
      */
     public Node createBudgetNode(Budget budget) {
         HBox hBox = new HBox(10);
@@ -208,7 +209,7 @@ public class UI extends Application {
      *
      * @param transaction budjettiin liittyvä erä
      *
-     * @return erään liityvä Node
+     * @return erään liityvä hBox.
      */
     public Node createEntryNode(Transaction transaction) {
         HBox hBox = new HBox(10);
@@ -312,6 +313,9 @@ public class UI extends Application {
         });
     }
 
+    /**
+     * Asettaa tekstikenttien leveyden.
+     */
     private void setTextFieldWidth(TextField field) {
         field.setMaxWidth(130);
     }
@@ -333,6 +337,12 @@ public class UI extends Application {
         System.out.println("Closing App");
     }
 
+    /**
+     * Tarkistaa tekstikentän syötteen.
+     * 
+     * @param text syötetty teksti.
+     * @return true jos syöte oikein, muuten false.
+     */
     private boolean validateStringField(String text) {
         if (text.isEmpty() || text.length() > 15) {
             Alert errorAlert = new Alert(AlertType.ERROR);
@@ -344,6 +354,13 @@ public class UI extends Application {
         return true;
     }
 
+    /**
+     * Tarkistaa tekstikentän syötteen, mikä muutetaan numeroksi. Ohjaa
+     * edelleen pituuden tarkistukseen.
+     * 
+     * @param tobeParsed syötetty teksti.
+     * @return true jos syöte oikein, muuten false.
+     */
     private boolean validateNumberField(String toBeParsed) {
         if (!toBeParsed.matches("^-?[1-9]?[0-9]+$") || toBeParsed.isEmpty()) {
             Alert errorAlert = new Alert(AlertType.ERROR);
@@ -355,6 +372,12 @@ public class UI extends Application {
         return testNumberLenght(toBeParsed);
     }
 
+    /**
+     * Tarkistaa tekstikentän syötteen.
+     * 
+     * @param number syötetty teksti.
+     * @return true jos syöte oikein, muuten false.
+     */
     private boolean testNumberLenght(String number) {
         if (number.length() > 7) {
             Alert errorAlert = new Alert(AlertType.ERROR);

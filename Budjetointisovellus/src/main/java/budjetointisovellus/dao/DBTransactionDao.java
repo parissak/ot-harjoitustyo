@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Luokka vastaa budjetin erien tallentamisesta tietokantaan ja sieltä
+ * hakemisesta.
+ */
 public class DBTransactionDao implements TransactionDao {
 
     private BudgetDao budgetDao;
@@ -43,9 +47,8 @@ public class DBTransactionDao implements TransactionDao {
     /**
      * Hakee tietokannasta tietyn käyttäjän budjettiin liittyvät erät.
      *
-     * @param budget haettu budjetti-olio.
-     * @param name erän nimi.
-     * @param amount erän määrä.
+     * @param user käyttäjä-olio.
+     * @param budget budjetti-olio.
      * @return lista eristä.
      */
     @Override
@@ -94,8 +97,8 @@ public class DBTransactionDao implements TransactionDao {
         stmt.close();
         conn.close();
     }
-    
-     private void createTransactionTable() throws SQLException {
+
+    private void createTransactionTable() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:h2:./database", "sa", "");
         conn.prepareStatement("CREATE TABLE IF NOT EXISTS Transaction "
                 + "(id IDENTITY AUTO_INCREMENT, name varchar(15), amount integer, budget_name varchar(15), "

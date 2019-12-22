@@ -3,6 +3,9 @@ package budjetointisovellus.domain;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Käyttäjää vastaava luokka.
+ */
 public class User {
     private String username;
     private ArrayList<Budget> budgets;

@@ -9,6 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Luokka vastaa käyttäjän tallentamisesta tietokantaan ja sieltä hakemisesta.
+ */
 public class DBUserDao implements UserDao {
 
     public DBUserDao() throws Exception {
