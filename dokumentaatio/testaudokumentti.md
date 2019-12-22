@@ -14,6 +14,8 @@ DAO-luokkien toiminnallisuus on testattu normaalin käyttöön liittyvää tieto
 
 Käyttöliittymäkerrosta ei ole testattu. Ilman tätä testauksen rivikattavuus on 82% ja haarautumakattavuus 71%.
 
+![alt text](https://github.com/parissak/ot-harjoitustyo/tree/master/dokumentaatio)
+
 ## Järjestelmätestaus
 
 Järjestelmätestaus on suoritettu manuaalisesti sovelluksen eri kehitysvaiheissa. Tähän on kuulunut esimerkiksi tietokannan tietojen pysyvyyden, eri olioden poistamisen ja virheellisten syötteiden antamisen testaus. 
