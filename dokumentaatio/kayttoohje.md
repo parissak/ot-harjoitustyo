@@ -42,4 +42,4 @@ Ohjelmasta poistutaan painamalla ohjelman oikeasta yläreunassa olevaa “x” -
 
 ## Tietokannan poistaminen
 
-Ohjelma luo automaattisesti sovelluksen juureen tietokantatiedoston “database.mv.db”. Mikäli sovellukseen syötetyt tiedot halutaan poistaa pysyvästi, tulee tietokanta poistaa. Sovellus luo uuden samannimisen tietokantatiedoston seuraavan käynnistyksen yhteydessä.
+Ohjelma luo automaattisesti sovelluksen yhteyteen tietokantatiedoston “database.mv.db”. Mikäli sovellukseen syötetyt tiedot halutaan poistaa pysyvästi, tulee tietokanta poistaa. Sovellus luo uuden samannimisen tietokantatiedoston seuraavan käynnistyksen yhteydessä.
