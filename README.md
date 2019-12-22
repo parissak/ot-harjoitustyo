@@ -8,6 +8,12 @@ Sovelluksen avulla käyttäjän on mahdollista luoda haluamalleen asialle budjet
 
 [Arkkitehtuuri](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)
 
+[Käyttöohje](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kayttoohje.md)
+
+[Testausdokumentti](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/testaudokumentti.md)
+
+
+
 ## Releaset
 [Viikko 5](https://github.com/parissak/ot-harjoitustyo/releases)
 
