@@ -7,6 +7,11 @@ Ohjelman rakenne noudattelee kolmitasoista kerrosarkkitehtuuria. Koodin pakkausr
 ![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/rakenne.png)
 
 
+## Käyttöliittymä
+
+Käyttöliittymä on pyritty eristämään sovelluslogiikasta ja se kutsuu sopivin parametrein sovelluslogiikan metodeja. Se sisältää kolme erillistä näkymää: kirjautumiseen, budjetteihin ja budjettien eriin liittyvät näkymät. Budjetteihin ja budjettien eriin liittyvät listaukset voivat vaihtua käyttäjän poistaessa tai lisätessä niitä. Näkymän päivityksestä vastaavat erilliset metodit, jotka päivittävät tiedon sovelluslogiikalta saamansa tiedon perusteella.
+
+
 ## Sovelluslogiikka
 Sovelluksen loogisen datamallin muodostavat luokat Budget ja Tranasction, jotka kuvaavat budjetteja ja niiden eriä.
 
