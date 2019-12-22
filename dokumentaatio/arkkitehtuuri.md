@@ -13,13 +13,9 @@ Käyttöliittymä on pyritty eristämään sovelluslogiikasta ja se kutsuu sopiv
 
 
 ## Sovelluslogiikka
-Sovelluksen loogisen datamallin muodostavat luokat Budget ja Tranasction, jotka kuvaavat budjetteja ja niiden eriä.
+Sovelluksen loogisen datamallin muodostavat luokat User, Budget ja Transaction, mitkä kuvaavat käyttäjiä, budjetteja ja niiden eriä. Niiden välisiä suhteita voi kuvata seuraavasti: käyttäjällä voi olla useita budjetteja ja budjetilla vastaavasti useita eriä, mutta yksittäinen budjetti ei voi kuulua usealla käyttäjälle eikä yksittäinen erä voi sisältyä useaan eri budjettiin.
 
-Toiminnallisista kokonaisuuksista vastaa luokan BudgetService olio. Luokka tarjoaa kaikille käyttöliittymän toiminnoille oman metodin. Näitä ovat budjettien lisääminen sekä poistaminen, budjetin erien lisääminen sekä poistaminen ja budjettien sekä erien listaaminen. 
-
-BudgetService pääsee käsiksi budjetteihin ja niiden eriin BudgetDao -rajapinnan toteuttavan luokan kautta.
-
-BudgetServicen ja ohjelman muiden osien suhdetta kuvaava luokka/pakkauskaavio:
+BudgetService -olio toimii edellä mainittujen luokkien välissä koordinoiden toimintaa. Luokka tarjoaa kaikille käyttöliittymän toiminnoille oman metodin. Näitä ovat budjettien ja erien lisääminen, poistaminen ja listaaminen ja käyttäjien lisääminen. Käsittely tapahtuu eri rajapintojen kautta. BudgetServicen ja ohjelman muiden osien suhdetta kuvaa seuraava luokkakaavio:
 
 ![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/pakettikaavio.jpg)
 
