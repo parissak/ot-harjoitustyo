@@ -17,14 +17,19 @@ Sovelluksen loogisen datamallin muodostavat luokat User, Budget ja Transaction, 
 
 BudgetService -olio toimii edellä mainittujen luokkien välissä koordinoiden toimintaa. Luokka tarjoaa kaikille käyttöliittymän toiminnoille oman metodin. Näitä ovat budjettien ja erien lisääminen, poistaminen ja listaaminen ja käyttäjien lisääminen. Käsittely tapahtuu eri rajapintojen kautta. BudgetServicen ja ohjelman muiden osien suhdetta kuvaa seuraava luokkakaavio:
 
-![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/pakettikaavio.jpg)
+![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/luokkakaavio.png)
 
 
 ## Tietojen pysyväistallennus
-Pakkauksen budget.dao luokka FileBudgetDao huolehtii tietojen tallettamisesta tiedostoon ja vastaavasti tiedon hakemisesta ohjelman tietorakenteisiin.
+Luokat DBUserDao, DBBudgetDao ja DBTransactionDao huolehtivat tietojen tallentamisesta tietokantaan ja sieltä hakemisesta. 
 
-Luokka noudattaa Data Access Object -suunnittelumallia ja se on tarvittaessa mahdollista korvata uudella toteutuksella. LUokka on eristetty rajapinnan BudgetDao taakse ja sovelluslogiikka ei käytä luokkaa suoraan.
+Sovelluksen käynnistyksen yhteydessä sen yhteyteen muodostuu tietokantatiedosto "database.db", joka sisältää siis sovelluksen muokkaamat tiedot. Sovellus luo aina uuden tietokantatiedoston jos sellaista ei ole valmiina.
 
 
 ## Päätoiminnallisuudet
+
+### Käyttäjän kirjautuminen 
 ![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/Budjetin%20luominen.png)
+
+### Budjetin luominen
+
