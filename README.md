@@ -15,7 +15,7 @@ Sovelluksen avulla käyttäjän on mahdollista luoda haluamalleen asialle budjet
 
 
 ## Releaset
-[Viikko 5](https://github.com/parissak/ot-harjoitustyo/releases)
+[Viikko 7](https://github.com/parissak/ot-harjoitustyo/releases/tag/Viikko7)
 
 ## Komentorivitoiminnot
 ### Testaus
