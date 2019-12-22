@@ -14,7 +14,7 @@ DAO-luokkien toiminnallisuus on testattu normaalin käyttöön liittyvää tieto
 
 Käyttöliittymäkerrosta ei ole testattu. Ilman tätä testauksen rivikattavuus on 82% ja haarautumakattavuus 71%.
 
-![alt text](https://github.com/parissak/ot-harjoitustyo/tree/master/dokumentaatio)
+![alt text](https://github.com/parissak/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/testauskattavuus.png)
 
 ## Järjestelmätestaus
 
