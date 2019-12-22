@@ -27,10 +27,6 @@ public class Budget {
         this.user = user;
     }
 
-    public ArrayList getTransactions() {
-        return this.events;
-    }
-
     public void setTransaction(Transaction transaction) {
         this.events.add(transaction);
     }
@@ -41,10 +37,6 @@ public class Budget {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void removeTransaction(Transaction transaction) {

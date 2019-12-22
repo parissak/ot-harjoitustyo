@@ -50,10 +50,14 @@ public class BudgetService {
     }
 
     /**
-     * Asettaa käyttäjän uloskirjautuneeksi
+     * Asettaa käyttäjän uloskirjautuneeksi.
      */
     public void logOut() {
         this.loggedIn = null;
+    }
+
+    public User getLoggedUser() {
+        return this.loggedIn;
     }
 
     /**
@@ -69,7 +73,6 @@ public class BudgetService {
             budgetDao.create(budget);
             return true;
         } catch (Exception ex) {
-            System.out.println(ex);
             return false;
         }
     }
@@ -135,7 +138,7 @@ public class BudgetService {
 
     /**
      * Pyytää rajapintaa lisäämään erän tiettyyn budjettiin. Lisää myös
-     * budjetti-olioon erän, jotta budjetin summa tulostuu oikein 
+     * budjetti-olioon erän, jotta budjetin summa tulostuu oikein
      * käyttöliittymässä.
      *
      * @budget käyttäjän valitsema budjetti.
@@ -161,7 +164,6 @@ public class BudgetService {
      */
     public List<Transaction> getBudgetTransactions(Budget budget) {
         List<Transaction> list = new ArrayList<>();
-
         try {
             list = transactionDao.getUserBudgetsTransactions(loggedIn, budget);
             return list;
@@ -172,7 +174,7 @@ public class BudgetService {
 
     /**
      * Pyytää rajapintaa poistamaan tietyn budjetin tietyn erän. Poistaa myös
-     * budjetti-oliolta erän, jotta budjetin summa tulostuu oikein 
+     * budjetti-oliolta erän, jotta budjetin summa tulostuu oikein
      * käyttöliittymässä.
      *
      * @budget käyttäjän valitsema budjetti.
@@ -180,9 +182,9 @@ public class BudgetService {
      * @return true jos poistaminen onnistui, muuten false
      */
     public boolean removeTransaction(Budget budget, Transaction transaction) {
-        budget.removeTransaction(new Transaction(transaction.getName(), 
+        budget.removeTransaction(new Transaction(transaction.getName(),
                 transaction.getAmount()));
-        
+
         try {
             transactionDao.remove(budget, transaction);
         } catch (Exception ex) {

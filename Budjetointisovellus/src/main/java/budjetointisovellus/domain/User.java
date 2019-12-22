@@ -20,14 +20,6 @@ public class User {
         this.username = username;
     }
     
-    public void setBudget(Budget budget) {
-        this.budgets.add(budget);
-    }
-
-    public ArrayList<Budget> getBudgets() {
-        return budgets;
-    }
-    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
