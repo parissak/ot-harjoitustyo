@@ -13,4 +13,5 @@
 19.12. | 3h | Tietokannan toteutus.
 20.12. | 4h | Tietokannan toteutus.
 21.12. | 5,5h | Eriin liittyvän tallennuksen eriyttäminen, logiikan kehittäminen, käyttöohjeen päivitys.
-**Yht.** | 51h |
+22.12. | 7h | Testien lisääminen, dokumentaation viimeistely.
+**Yht.** | 58h |
